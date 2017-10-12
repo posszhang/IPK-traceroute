@@ -1,0 +1,20 @@
+./" Manpage for trace
+.TH man 1 "22 April 2017" "1.0" "trace man page"
+.SH NAME
+trace \- vypíše routery po cestě k hostu zadané adresy
+.SH SYNOPSIS
+trace [\fB\-f\fR \fIFIRST_PACKET_TTL\fR] [\fB\-m\fR \fIMAX_TTL\fR] \fIHOST\fR
+.SH DESCRIPTION
+Program provádí rekonstrukci cesty paketu k cílovému hostu pomocí UDP paketů s navyšujícím se TTL. 
+
+Pro komunikaci je použito UDP socketu. K identifikaci routerů po cestě je využito ICMP chyb z nichž je vyčtena IP adresa routeru. Jelikož UDP socket nedokáže normálně přijímat ICMP zprávy, je využito MSG_ERRQUEUE. 
+
+V každém kroku jsou zaslány 3 pakety. Program skončí předčasně pokud narazí na ICMP chyby(v závorce za chybou je značka, kterou je nahrazena odezva ve výpisu) host unreachable(\fB!H\fR), network unreachable(\fB!N\fR), protocol unreachable(\fB!P\fR), communication administratively prohibited(\fB!X\fR) nebo pokud dosáhne maximálního ttl. Dosáhnutí cíle značí chyba Port Unreachable. Výpis je ve tvaru hostname(ip) odezva1 odezva2 odezva3.
+.SH OPTIONS
+\fB\-f\fR \fIFIRST_PACKET_TTL\fR - Umožňuje zadat TTL prvního zaslaného paketu. Implicitní hodnota je 1.
+
+\fB\-m\fR \fIMAX_TTL\fR - Umožňuje zadat maximálního ttl. Implicitní hodnota je 30.
+
+\fIHOST\fR - Hostname, IPv4 nebo IPv6 adresa hosta, cesta k němuž má být trasována.
+.SH AUTHOR
+Jakub Zapletal (xzaple36@stud.fit.vutbr.cz)
